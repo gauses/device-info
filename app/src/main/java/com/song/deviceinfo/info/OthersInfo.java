@@ -35,7 +35,7 @@ public class OthersInfo {
         list.add(new Pair<>("Read Threshold", FileUtils.readFile("/proc/sys/kernel/random/read_wakeup_threshold")));
         list.add(new Pair<>("Write Threshold", FileUtils.readFile("/proc/sys/kernel/random/write_wakeup_threshold")));
         list.add(new Pair<>("Secs", FileUtils.readFile("/proc/sys/kernel/random/urandom_min_reseed_secs")));
-        new OaidUtils().getOaidsInfo(context, list);
+//        new OaidUtils().getOaidsInfo(context, list);
         list.add(new Pair<>("Country", Locale.getDefault().getLanguage() + "-" + Locale.getDefault().getCountry()));
         // 显示
         list.add(new Pair<>("DPI", DensityUtils.getDensityDpi(context) + ""));
