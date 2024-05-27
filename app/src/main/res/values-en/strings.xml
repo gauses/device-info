@@ -92,4 +92,6 @@
     <string name="camera_orientation">Orientation</string>
     <string name="camera_flash">Flash</string>
     <string name="menu_hardware">Hardware</string>
+    <string name="menu_system_file">System_File</string>
+
 </resources>

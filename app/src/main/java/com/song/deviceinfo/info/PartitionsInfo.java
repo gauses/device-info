@@ -1,6 +1,7 @@
 package com.song.deviceinfo.info;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.song.deviceinfo.model.beans.PartitionsBean;
 import com.song.deviceinfo.utils.CommandUtils;
@@ -21,6 +22,7 @@ public class PartitionsInfo {
         Map<String, PartitionsBean> df = parseDf();
         List<PartitionsBean> list = new ArrayList<>();
         for (String line : lines) {
+            Log.i("PartitionsInfo", "line = " +line);
             String[] args = line.split(" ");
             if (args.length < 4) {
                 continue;
@@ -91,6 +93,53 @@ public class PartitionsInfo {
             map.put(path, bean);
         }
         return map;
+    }
+
+
+
+    public static List<PartitionsBean> getSysTemFilePartitionsInfo() {
+        String[] lines = CommandUtils.exec("mount");
+        Map<String, PartitionsBean> df = parseDf();
+        List<PartitionsBean> list = new ArrayList<>();
+        for (String line : lines) {
+            Log.i("PartitionsInfo", "line = " +line);
+            String[] args = line.split(" ");
+            if (args.length < 4) {
+                continue;
+            }
+            String mount = args[0];
+            String path = args[2];
+            String type = args[4];
+            String rws = args[5];
+            String rw = "";
+            if (!TextUtils.isEmpty(rws)) {
+                if (rws.startsWith("(rw")) {
+                    rw = "read-write";
+                } else if (rws.startsWith("(ro")) {
+                    rw = "read-only";
+                } else {
+                    rw = Constants.UNKNOWN;
+                }
+            }
+
+            //只保留/sys目录
+            if (path.contains("/sys")){
+                PartitionsBean bean = new PartitionsBean();
+                bean.setPath(path);
+                bean.setMount(mount);
+                bean.setFs(type);
+                bean.setMod(rw);
+                if (df.containsKey(mount)) {
+                    PartitionsBean partitionsBean = df.get(mount);
+                    bean.setRatio(partitionsBean.getRatio());
+                    bean.setUsed(partitionsBean.getUsed());
+                    bean.setSize(partitionsBean.getSize());
+                }
+                list.add(bean);
+            }
+
+        }
+        return list;
     }
 
 }

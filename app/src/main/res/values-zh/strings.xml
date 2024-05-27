@@ -90,4 +90,5 @@
     <string name="camera_orientation">方向</string>
     <string name="camera_flash">闪光灯</string>
     <string name="menu_hardware">硬件</string>
+    <string name="menu_system_file">sys目录</string>
 </resources>

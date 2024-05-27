@@ -12,6 +12,12 @@
         tools:layout="@layout/fragment_base" />
 
     <fragment
+        android:id="@+id/nav_system_file"
+        android:name="com.song.deviceinfo.ui.systemFile.SystemFileFragment"
+        android:label="@string/menu_system_file"
+        tools:layout="@layout/fragment_base" />
+
+    <fragment
         android:id="@+id/nav_net"
         android:name="com.song.deviceinfo.ui.net.NetFragment"
         android:label="@string/menu_net"

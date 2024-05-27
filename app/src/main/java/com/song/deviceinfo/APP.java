@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Build;
 
 import com.song.deviceinfo.utils.LanguageUtils;
-import com.tencent.bugly.crashreport.CrashReport;
 
 import androidx.multidex.MultiDex;
 
@@ -23,7 +22,6 @@ public class APP extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        CrashReport.initCrashReport(getApplicationContext(), "0334b35dea", false);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             LanguageUtils.changeAppLanguage(this, LanguageUtils.getDefaultLanguage(this));
         }
