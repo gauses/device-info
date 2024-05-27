@@ -35,10 +35,10 @@ android {
 
     signingConfigs {
         release {
-            keyAlias 'geetest'
-            keyPassword 'geetest'
-            storeFile file('../geetest_android_public.jks')
-            storePassword 'geetest'
+            keyAlias 'izpan'
+            keyPassword '123456'
+            storeFile file('../nest.jks')
+            storePassword '123456'
         }
     }
 
