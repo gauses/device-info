@@ -89,6 +89,6 @@
     <string name="camera_color_filter">彩色滤光片</string>
     <string name="camera_orientation">方向</string>
     <string name="camera_flash">闪光灯</string>
-    <string name="menu_hardware">硬件</string>
+    <string name="menu_hardware">硬件-传感器</string>
     <string name="menu_system_file">sys目录</string>
 </resources>

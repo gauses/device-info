@@ -2,10 +2,12 @@ package com.song.deviceinfo.info;
 
 import android.os.Build;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.InputDevice;
 
 import com.song.deviceinfo.model.beans.InputBean;
 import com.song.deviceinfo.utils.FileUtils;
+import com.song.deviceinfo.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,8 +50,28 @@ public class InputInfo {
                         sb.append(device.getVendorId());
                         sb.append(" product: ");
                         sb.append(device.getProductId());
+                        sb.append(" Descriptor: ");
+                        sb.append(device.getDescriptor());
+                        sb.append(" Sources: ");
+                        sb.append(device.getSources());
+                        sb.append(" MotionRanges: ");
+                        sb.append(device.getMotionRanges());
+                        sb.append(" ControllerNumber: ");
+                        sb.append(device.getControllerNumber());
+                        sb.append(" Name: ");
+                        sb.append(device.getName());
+                        sb.append(" Vibrator: ");
+                        sb.append(device.getVibrator());
+                        sb.append(" productID: ");
+                        sb.append(device.getProductId());
+                        sb.append(" KeyboardType: ");
+                        sb.append(device.getKeyboardType());
+                        sb.append(" KeyCharacterMap: ");
+                        sb.append(device.getKeyCharacterMap());
+
                     }
                     inputBean.setAttribute(sb.toString());
+                    LogUtils.i("传感器", sb.toString());
                     inputList.add(inputBean);
                 }
             }

@@ -125,6 +125,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-perf:19.0.10'
 
 
+    implementation 'com.google.code.gson:gson:2.11.0'
+
 //    debugImplementation 'com.didichuxing.doraemonkit:doraemonkit:3.1.5'
 //    releaseImplementation 'com.didichuxing.doraemonkit:doraemonkit-no-op:3.1.5'
 
