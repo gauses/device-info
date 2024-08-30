@@ -11,6 +11,7 @@ import androidx.core.util.Pair;
 
 import com.google.gson.JsonObject;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -26,7 +27,7 @@ public class SaveFileToSd {
      * 参    数：无
      * 返回值：String
      */
-    public static String saveToLocal(Context context, JsonObject jsonObject) {
+    public static String saveToLocal(Context context, JSONArray jsonArray) {
 
         //List<Pair<String, JSONObject>> jsonList
 
@@ -42,11 +43,12 @@ public class SaveFileToSd {
                 dir.mkdirs();
             }
 
-                String json = jsonObject.toString();
+//                String json = jsonObject.toString();
                 File file = new File(dir, fileName);
 
                 OutputStream out = new FileOutputStream(file, false);
-                out.write(json.getBytes());
+//                out.write(json.getBytes());
+                out.write(jsonArray.toString().getBytes());
                 out.close();
                 Log.i("RecordApp", "保存Config成功 path:" + file.getPath());
 //                Toast.makeText(context, "保存传感器配置成功,路径："+file.getPath(), Toast.LENGTH_LONG).show();

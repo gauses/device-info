@@ -114,7 +114,9 @@ public class HardwareInfo {
         allTypeList.add(new Pair<>("REPORTING_MODE_SPECIAL_TRIGGER",REPORTING_MODE_SPECIAL_TRIGGER));
 
 
-        JsonObject jsonList = new JsonObject();
+//        JsonObject jsonList = new JsonObject();
+        JSONArray jsonArray = new JSONArray();
+
 
         for (int i = 0; i < allTypeList.size(); i++) {
             if (allTypeList.get(i).second != null) {
@@ -141,14 +143,28 @@ public class HardwareInfo {
                     sensorDataJson.put("Power", allTypeList.get(i).second.getPower());
                     sensorDataJson.put("MinDelay", allTypeList.get(i).second.getMinDelay());
                     sensorDataJson.put("Version", allTypeList.get(i).second.getVersion());
-                    sensorDataJson.put("isAdditionalInfoSupported", allTypeList.get(i).second.isAdditionalInfoSupported());
-                    sensorDataJson.put("isDynamicSensor", allTypeList.get(i).second.isDynamicSensor());
-                    sensorDataJson.put("isWakeUpSensor", allTypeList.get(i).second.isWakeUpSensor());
+
+                    if (allTypeList.get(i).second.isAdditionalInfoSupported() == true) {
+                        sensorDataJson.put("isAdditionalInfoSupported", allTypeList.get(i).second.isAdditionalInfoSupported());
+                    }
+                    if (allTypeList.get(i).second.isDynamicSensor()) {
+                        sensorDataJson.put("isDynamicSensor", allTypeList.get(i).second.isDynamicSensor());
+                    }
+                    if (allTypeList.get(i).second.isWakeUpSensor()) {
+                        sensorDataJson.put("isWakeUpSensor", allTypeList.get(i).second.isWakeUpSensor());
+                    }
+
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         //https://developer.android.com/reference/android/hardware/Sensor#isDirectChannelTypeSupported(int)
-                        sensorDataJson.put("isDirectChannelTypeSupported-TYPE_MEMORY_FILE", allTypeList.get(i).second.isDirectChannelTypeSupported(SensorDirectChannel.TYPE_MEMORY_FILE));
-                        sensorDataJson.put("isDirectChannelTypeSupported-TYPE_HARDWARE_BUFFER", allTypeList.get(i).second.isDirectChannelTypeSupported(SensorDirectChannel.TYPE_HARDWARE_BUFFER));
-                        sensorDataJson.put("isDirectChannelTypeSupported-0", allTypeList.get(i).second.isDirectChannelTypeSupported(0));
+                        if (allTypeList.get(i).second.isDirectChannelTypeSupported(SensorDirectChannel.TYPE_MEMORY_FILE)){
+                            sensorDataJson.put("isDirectChannelTypeSupported-TYPE_MEMORY_FILE", allTypeList.get(i).second.isDirectChannelTypeSupported(SensorDirectChannel.TYPE_MEMORY_FILE));
+                        }
+                        if (allTypeList.get(i).second.isDirectChannelTypeSupported(SensorDirectChannel.TYPE_HARDWARE_BUFFER)){
+                            sensorDataJson.put("isDirectChannelTypeSupported-TYPE_HARDWARE_BUFFER", allTypeList.get(i).second.isDirectChannelTypeSupported(SensorDirectChannel.TYPE_HARDWARE_BUFFER));
+                        }
+                        if (allTypeList.get(i).second.isDirectChannelTypeSupported(0)) {
+                            sensorDataJson.put("isDirectChannelTypeSupported-0", allTypeList.get(i).second.isDirectChannelTypeSupported(0));
+                        }
                     }
 
 
@@ -157,17 +173,19 @@ public class HardwareInfo {
                 }
 
                 Log.i("sensorDataList", "sensorDataJson = " + sensorDataJson);
-                jsonList.addProperty(allTypeList.get(i).first, sensorDataJson.toString());
+
+                jsonArray.put(sensorDataJson);
+
+
 
                 //UI展示
                 list.add(new Pair<>(allTypeList.get(i).first, allTypeList.get(i).second.toString()));
 
-            }else {
-                jsonList.addProperty(allTypeList.get(i).first, new JSONObject().toString());
             }
+
         }
 
-        SaveFileToSd.saveToLocal(context, jsonList);
+        SaveFileToSd.saveToLocal(context, jsonArray);
 
 
 
