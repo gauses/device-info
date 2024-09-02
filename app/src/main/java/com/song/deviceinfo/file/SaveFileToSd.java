@@ -29,12 +29,12 @@ public class SaveFileToSd {
      */
     public static String saveToLocal(Context context, JSONArray jsonArray) {
 
-        //List<Pair<String, JSONObject>> jsonList
-
         //文件夹路径
         File dir = new File(Environment.getExternalStorageDirectory() + "/NestConfig/");
+//        File dir = new File("data/local/tmp");
+
         //文件名
-        String fileName = "config.json";
+        String fileName = "NestConfig.json";
 
 
         try {
@@ -43,15 +43,12 @@ public class SaveFileToSd {
                 dir.mkdirs();
             }
 
-//                String json = jsonObject.toString();
                 File file = new File(dir, fileName);
 
                 OutputStream out = new FileOutputStream(file, false);
-//                out.write(json.getBytes());
                 out.write(jsonArray.toString().getBytes());
                 out.close();
                 Log.i("RecordApp", "保存Config成功 path:" + file.getPath());
-//                Toast.makeText(context, "保存传感器配置成功,路径："+file.getPath(), Toast.LENGTH_LONG).show();
                 return file.getPath();
 
 

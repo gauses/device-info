@@ -1,15 +1,21 @@
 package com.song.deviceinfo.info;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.hardware.Sensor;
 import android.hardware.SensorDirectChannel;
 import android.hardware.SensorManager;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.util.Pair;
 
 import static android.content.Context.SENSOR_SERVICE;
@@ -26,10 +32,99 @@ import org.json.JSONObject;
  */
 public class HardwareInfo {
 
-    public static List<Pair<String, String>> getHardwareInfo(Context context) {
-        List<Pair<String, String>> list = new ArrayList<>();
+    //列表
+    static List<Pair<String, String>> list = new ArrayList<>();
+
+    static Context mContext;
+    static JSONArray jsonArray = new JSONArray();
 
 
+
+    private static final Handler handler = new Handler(Looper.getMainLooper());
+    private static final Runnable dataCollectionRunnable = new Runnable() {
+        @Override
+        public void run() {
+            collectData(mContext); // 这里是你采集数据的代码
+            handler.postDelayed(this, 100); // 每0.1秒钟重复一次
+        }
+    };
+
+    public static void startDataCollection() {
+        ((Activity)mContext).runOnUiThread(new Runnable()
+        {
+            public void run()
+            {
+                Toast.makeText(mContext, "10秒之后，1分钟采集就会开始,结束时候会有结束提示...........", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        handler.postDelayed(dataCollectionRunnable, 10000); // 10秒钟后开始
+
+        handler.postDelayed(
+                (new Runnable() {
+                    @Override
+                    public void run() {
+                        handler.removeCallbacks(dataCollectionRunnable);
+                        //保存
+//                        SaveFileToSd.saveToLocal(mContext, jsonArray);
+                        ((Activity)mContext).runOnUiThread(new Runnable()
+                        {
+                            public void run()
+                            {
+                                showTips();
+
+                            }
+                        });
+                    }
+                }),
+                60000 + 60000); // 1分钟后停止
+    }
+
+
+    public static void showTips(){
+        // Permission Denied
+        AlertDialog mDialog = new AlertDialog.Builder(mContext)
+                .setTitle("友好提醒")
+                .setMessage("1分钟采集已经结束，可以去SDka/NestConfigxia看文件是否保存成功！")
+                .setPositiveButton("开启", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+
+                    }
+                })
+                .setCancelable(true)
+                .create();
+        mDialog.show();
+    }
+
+    public static void showStartShips()  {
+        // Permission Denied
+        AlertDialog mDialog = new AlertDialog.Builder(mContext)
+                .setTitle("友好提醒")
+                .setMessage("10秒之后，1分钟采集就会开始,结束时候会有结束提示...........")
+                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+
+                    }
+                })
+                .setCancelable(true)
+                .create();
+        mDialog.show();
+        try {
+            Thread.sleep(15000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        mDialog.cancel();
+    }
+
+
+    private static void collectData(Context context) {
+        // 采集数据的实现
+        mContext = context;
 
         SensorManager sensorManager = (SensorManager) context.getSystemService(SENSOR_SERVICE);
 
@@ -114,9 +209,6 @@ public class HardwareInfo {
         allTypeList.add(new Pair<>("REPORTING_MODE_SPECIAL_TRIGGER",REPORTING_MODE_SPECIAL_TRIGGER));
 
 
-//        JsonObject jsonList = new JsonObject();
-        JSONArray jsonArray = new JSONArray();
-
 
         for (int i = 0; i < allTypeList.size(); i++) {
             if (allTypeList.get(i).second != null) {
@@ -124,6 +216,11 @@ public class HardwareInfo {
                 Log.i("sensorDataList", allTypeList.get(i).second.toString());
 
                 try {
+
+                    sensorDataJson.put("collectTime", System.currentTimeMillis());
+
+                    sensorDataJson.put("Id", allTypeList.get(i).second.getId());
+
                     sensorDataJson.put("Id", allTypeList.get(i).second.getId());
                     sensorDataJson.put("Name", allTypeList.get(i).second.getName());
                     sensorDataJson.put("Type", allTypeList.get(i).second.getType());
@@ -172,8 +269,7 @@ public class HardwareInfo {
                     throw new RuntimeException(e);
                 }
 
-                Log.i("sensorDataList", "sensorDataJson = " + sensorDataJson);
-
+//                Log.i("sensorDataList", "sensorDataJson = " + sensorDataJson);
                 jsonArray.put(sensorDataJson);
 
 
@@ -185,11 +281,22 @@ public class HardwareInfo {
 
         }
 
-        SaveFileToSd.saveToLocal(context, jsonArray);
+    }
 
 
+    public static List<Pair<String, String>> getHardwareInfo(Context context) {
+
+        collectData(context);
+
+        //采集
+        startDataCollection();
 
         return list;
+
+
+
+
+
     }
 
 
