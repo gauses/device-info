@@ -334,39 +334,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-
-
-            if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-//                if (startCollect == true) {
-//                    JSONObject sensorDataJson = putSensorToJson(event.sensor);
-//                    try {
-//                        sensorDataJson.put("accuracy", event.accuracy);
-//                        sensorDataJson.put("timestamp", event.timestamp);
-//                        if (event!= null) {
-//                            sensorDataJson.put("X", event.values[0]);
-//                            sensorDataJson.put("Y", event.values[1]);
-//                            sensorDataJson.put("Z", event.values[2]);
-//                        }
-//
-//
-//                    } catch (JSONException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//
-//                    sensorJsonArray.put(sensorDataJson);
-//                }
-
-
-
-
-            }  else if (event.sensor.getType() == Sensor.TYPE_PRESSURE) {
-
-                Log.i("TYPE_PRESSURE_X = ", Float.toString(event.values.length));
-//                Log.i("TYPE_PRESSURE_X = ", Float.toString(event.values[0]));
-//                Log.i("TYPE_PRESSURE_Y = ", event.values[1]+"");
-//                Log.i("TYPE_PRESSURE_Z = ", Float.toString(event.values[2]));
-
-            }
         }
 
         @Override
@@ -392,7 +359,8 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();
-                                startDataCollection();
+                                //0919：暂停打开之后，首页收集sensor数据
+//                                startDataCollection();
 
                             }
                         })
